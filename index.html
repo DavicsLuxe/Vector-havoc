@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#05080f">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Havoc">
+<title>VECTOR HAVOC</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Orbitron:wght@600;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css"><link rel="stylesheet" href="css/havoc.css">
+<style>body{background:#05080f}#boot{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;color:#cfe;font:18px/1.5 system-ui,sans-serif;z-index:999;background:#05080f}</style>
+</head>
+<body>
+<div id="boot">Loading VECTOR HAVOC…<br>If this stays here, the game files did not load. Open the game from its server address (for example https://your-game.onrender.com), not by double-clicking the file.</div>
+<canvas id="gl"></canvas><canvas id="fx"></canvas>
+
+<!-- ========== INTRO ========== -->
+<section id="intro" class="screen">
+  <div class="in-grid"></div><div class="in-scan"></div><div class="in-vig"></div>
+  <div class="in-center">
+    <svg class="in-mark" viewBox="0 0 120 120" aria-hidden="true">
+      <defs><linearGradient id="gv" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#19e6ff"/><stop offset="1" stop-color="#2b6bff"/></linearGradient>
+      <linearGradient id="go" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffb02e"/><stop offset="1" stop-color="#ff5a1f"/></linearGradient></defs>
+      <polygon class="m-v" points="8,20 38,20 60,76 82,20 112,20 72,104 48,104" fill="none" stroke="url(#gv)" stroke-width="3" stroke-linejoin="round"/>
+      <polygon class="m-f" points="8,20 38,20 60,76 82,20 112,20 72,104 48,104" fill="url(#gv)"/>
+      <polygon class="m-o" points="62,10 98,10 92,22 68,22" fill="url(#go)"/>
+    </svg>
+    <div class="in-name" id="inName"></div>
+    <div class="in-year"><span class="yl"></span><span class="yt" id="inYear">2026</span><span class="yl"></span></div>
+    <div class="in-pres">PRESENTS</div>
+    <div class="in-game" id="inGame">VECTOR HAVOC</div>
+  </div>
+  <div class="in-ring r1"></div><div class="in-ring r2"></div>
+  <div class="in-bottom">
+    <div class="in-tip" id="inTip"></div>
+    <div class="in-bar"><i id="inBar"></i></div>
+    <div class="in-pct" id="inPct">0%</div>
+    <button id="inEnter" class="btn big pulse" style="display:none">TAP TO ENTER</button>
+  </div>
+</section>
+
+<!-- ========== HUB ========== -->
+<section id="hub" class="screen">
+  <div class="hub-top">
+    <div class="pcard" id="pcard">
+      <div class="lvl" id="hLvl">1</div>
+      <div class="pc-main"><div class="pc-name" id="hName">…</div><div class="xpbar"><i id="hXp"></i></div><div class="pc-sub" id="hXpT"></div></div>
+    </div>
+    <div class="curr"><span class="coin"></span><b id="hCoins">0</b><button class="plus" data-open="store:coins" aria-label="Get coins">+</button></div>
+    <div class="top-r"><span class="pill" id="hOnline"></span><button class="btn ghost icon" data-open="settings" aria-label="Settings">⚙</button></div>
+  </div>
+  <div class="hub-menu">
+    <div class="motd" id="hMotd"></div>
+    <button class="vvban" data-open="season:pass" id="vvBan"><span class="vvk">SEASON 1</span><b id="vvName">NEON HORIZON</b><small id="vvSub">presented by VectorVibes</small><i class="vvgo">▶</i></button>
+    <button class="btn big play" data-open="play">PLAY</button>
+    <div class="mrow">
+      <button class="btn ghost" data-open="season:crate">LUCKY DRAW</button>
+      <button class="btn ghost" data-open="loadout">LOADOUT</button>
+      <button class="btn ghost" data-open="store">STORE</button>
+    </div>
+    <div class="mrow">
+      <button class="btn ghost" id="bDaily" data-open="daily">DAILY <span class="dot" id="dDot"></span></button>
+      <button class="btn ghost" data-open="how">HOW TO PLAY</button>
+    </div>
+    <div class="hub-hint">Drag the soldier to rotate</div>
+  </div>
+  <div id="squadBar"></div>
+  <div class="hub-tools"><button class="btn ghost sm" id="hEmo">EMOTES</button><button class="btn ghost sm" id="hTheme">LOBBY: AUTO</button></div>
+  <div class="hub-name"><div id="hOp"></div><small id="hOpT"></small></div>
+  <div class="hub-brand"><b id="hStudio">VECTORGAMEX</b> <span id="hYear">2026</span></div>
+</section>
+
+<!-- ========== PAGES (play, loadout, store, daily, settings, how) ========== -->
+<section id="page" class="screen"><div class="pg">
+  <header><h2 id="pgTitle"></h2><div id="pgTabs" class="tabs"></div><button class="btn ghost icon" id="pgClose" aria-label="Close">✕</button></header>
+  <div id="pgBody" class="pgbody"></div>
+</div></section>
+
+<!-- ========== HUD ========== -->
+<section id="hud" class="screen">
+  <div class="h-top">
+    <canvas id="mini" width="150" height="150"></canvas>
+    <div class="h-score" id="hScore"></div>
+    <div class="h-right"><div id="killfeed"></div><div class="h-info"><span id="hPing"></span><span id="hFps"></span></div></div>
+  </div>
+  <div id="xh"><i class="t"></i><i class="b"></i><i class="l"></i><i class="r"></i><i class="d"></i><div id="hm"><i></i><i></i><i></i><i></i></div></div>
+  <div id="scope"></div><div id="dmgdir"></div>
+  <div id="pops"></div>
+  <div id="sqd"></div>
+  <div id="prompt"><button id="pmBtn"></button><div id="pmBar"><i></i></div></div>
+  <div id="rvFlt"></div><div id="vehHud"></div>
+  <div id="ssWrap"><div id="ssBar"><i></i></div><button id="ssBtn">UAV</button></div>
+  <div id="gren"></div>
+  <div class="h-tools"><button class="hb" id="hbCam" title="Camera (V)">CAM</button><button class="hb" id="hbEmo" title="Emote (B)">EMOTE</button></div>
+  <div id="wheel"></div>
+  <div id="banner"></div>
+  <div id="spec"></div>
+  <div id="voiceList"></div>
+  <div id="chatLog"></div>
+  <div class="h-bl"><div class="hbar"><i id="hpFill"></i><b id="hpTxt"></b></div><div class="hbar ar"><i id="arFill"></i><b id="arTxt"></b></div></div>
+  <div class="h-br" id="hWeap"><div id="wName"></div><div id="wAmmo"></div><div id="wAb"></div></div>
+  <div id="touch">
+    <div id="stickZone"></div><div id="stick"><i></i></div>
+    <div id="aimZone"></div>
+    <button id="tFire" class="tb fire"><span>FIRE</span></button>
+    <button id="tFire2" class="tb fire2"><span>FIRE</span></button>
+    <button id="tAds" class="tb ads"><span>ADS<br>FIRE</span></button>
+    <button id="tJump" class="tb jmp"><span>JUMP</span></button><button id="tSlide" class="tb sld"><span>SLIDE</span></button><button id="tCrouch" class="tb crc"><span>CROUCH</span></button>
+    <button id="tGren" class="tb grn"><span>FRAG</span></button><button id="tSwap" class="tb swp"><span>SWAP</span></button>
+    <button id="tUse" class="tb use"><span>ENTER</span></button><button id="tRev" class="tb rev"><span>SCAN</span></button>
+    <button id="tCam" class="tb cam"><span>VIEW</span></button><button id="tEmo" class="tb emo"><span>EMOTE</span></button><button id="tStreak" class="tb stk"><span>UAV</span></button>
+    <button id="tAb" class="tb ab"><span>ABILITY</span><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="3"/><circle id="abRing" cx="20" cy="20" r="17" fill="none" stroke="#19e6ff" stroke-width="3" stroke-dasharray="107" stroke-dashoffset="0" transform="rotate(-90 20 20)"/></svg></button>
+    <button id="tRl" class="tb rl"><span>RELOAD</span></button>
+    <button id="tSb" class="tb sb"><span>BOARD</span></button>
+    <button id="tChat" class="tb ch"><span>CHAT</span></button>
+    <button id="tMic" class="tb mc"><span>MIC</span></button>
+    <button id="tPause" class="tb ps"><span>II</span></button>
+  </div>
+  <div id="respawn"></div>
+  <div id="board" class="overlay"></div>
+  <div id="chatBox"><input id="chatIn" maxlength="160" placeholder="Message (start with /t for team)" autocomplete="off"><button class="btn" id="chatGo">SEND</button></div>
+</section>
+
+<!-- pause + end screens + modal -->
+<section id="pause" class="screen modal"><div class="box"><h2>PAUSED</h2>
+  <button class="btn big" id="pResume">RESUME</button><button class="btn ghost" id="pSet">SETTINGS</button><button class="btn ghost danger" id="pLeave">LEAVE MATCH</button></div></section>
+<section id="end" class="screen modal"><div class="box wide" id="endBox"></div></section>
+<section id="modal" class="screen modal"><div class="box" id="modalBox"></div></section>
+<div id="toasts"></div><div id="busy" class="busy"><i></i><span>Connecting…</span></div>
+<div id="rot" class="rot">Rotate your phone sideways for the best view</div>
+
+<script src="vendor/three.min.js"></script>
+<script src="js/shared.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/voice.js"></script>
+<script src="js/models.js"></script>
+<script src="js/hvx.js"></script>
+<script src="js/core.js"></script>
+<script src="js/r3d.js"></script>
+<script src="js/lobby.js"></script>
+<script src="js/input.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/ui2.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
